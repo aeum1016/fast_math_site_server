@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import userRoutes from "./routes/users.js";
+import attemptRoutes from "./routes/attempts.js";
 
 const app = express();
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
 app.use("/user", userRoutes);
+app.use("/attempts", attemptRoutes);
 
 const PORT = process.env.PORT || 5000;
 
