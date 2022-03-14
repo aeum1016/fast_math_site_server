@@ -49,7 +49,6 @@ export const createAttempt = async (req, res) => {
       }
     );
 
-    res.status(201).json(newAttempt);
     res.status(201).json(updatedUser);
   } catch (error) {
     res.status(409).json({ message: error.message });
