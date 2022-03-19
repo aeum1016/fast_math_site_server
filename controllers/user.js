@@ -32,13 +32,17 @@ export const signin = async (req, res) => {
 };
 
 export const signup = async (req, res) => {
-  const { email, password, confirmPassword, firstName, lastName } = req.body;
+  const { username, email, password, confirmPassword, firstName, lastName } =
+    req.body;
 
   try {
     const existingUser = await User.findOne({ email });
 
     if (existingUser)
       return res.status(400).json({ message: "User already exists." });
+    const user = await User.findOne({ username });
+
+    if (user) return res.status(400).json({ message: "User already exists." });
 
     if (password !== confirmPassword)
       return res.status(400).json({ message: "Passwords don't match" });
@@ -47,6 +51,7 @@ export const signup = async (req, res) => {
 
     const result = await User.create({
       email,
+      username,
       password: hashedPassword,
       name: `${firstName} ${lastName}`,
     });
