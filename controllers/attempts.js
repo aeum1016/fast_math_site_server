@@ -12,13 +12,13 @@ export const getAttempts = async (req, res) => {
 };
 
 export const getUserAttempts = async (req, res) => {
-  const email = req.params;
+  const { email } = req.params;
 
   try {
     const user = await User.find({ email });
     if (!user) return res.status(404).json({ message: "User doesn't exist." });
 
-    const attempts = user.attempts;
+    const attempts = user[0].attempts;
 
     res.status(200).json(attempts);
   } catch (error) {
