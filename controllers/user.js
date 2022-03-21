@@ -22,7 +22,7 @@ export const signin = async (req, res) => {
     const token = jwt.sign(
       { email: existingUser.email, id: existingUser._id },
       "test",
-      { expiresIn: "1h" }
+      { expiresIn: "12h" }
     );
 
     res.status(200).json({ result: existingUser, token });
@@ -61,6 +61,26 @@ export const signup = async (req, res) => {
     });
 
     res.status(200).json({ result, token });
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export const getuser = async (req, res) => {
+  const { email } = req.params;
+  try {
+    const existingUser = await User.findOne({ email });
+
+    if (!existingUser)
+      return res.status(400).json({ message: "User does not exist." });
+
+    const token = jwt.sign(
+      { email: existingUser.email, id: existingUser._id },
+      "test",
+      { expiresIn: "12h" }
+    );
+
+    res.status(200).json({ result: existingUser, token });
   } catch (error) {
     res.status(500).json({ message: "Something went wrong" });
   }

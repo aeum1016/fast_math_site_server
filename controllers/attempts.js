@@ -15,12 +15,17 @@ export const getUserAttempts = async (req, res) => {
   const { email } = req.params;
 
   try {
-    const user = await User.find({ email });
-    if (!user) return res.status(404).json({ message: "User doesn't exist." });
+    var userAttempts = [];
+    const attempts = await Attempt.find();
+    userAttempts = attempts.filter((a) => a.email === email);
 
-    const attempts = user[0].attempts;
+    if (!userAttempts.length) {
+      return res
+        .status(404)
+        .json({ message: "User doesn't exist or has no attempts." });
+    }
 
-    res.status(200).json(attempts);
+    res.status(200).json(userAttempts);
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
@@ -37,19 +42,7 @@ export const createAttempt = async (req, res) => {
   try {
     await newAttempt.save();
 
-    const user = await User.findOne({ email: newAttempt.email });
-    if (!user) return res.status(404).json({ message: "User doesn't exist." });
-    user.attempts.push(newAttempt);
-
-    const updatedUser = await User.findOneAndUpdate(
-      { email: newAttempt.email },
-      user,
-      {
-        new: true,
-      }
-    );
-
-    res.status(201).json(updatedUser);
+    res.status(201).json(newAttempt);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }

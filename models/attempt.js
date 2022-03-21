@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const attemptSchema = mongoose.Schema({
-  username: { type: String, required: true },
   email: { type: String, required: true },
+  username: { type: String, required: true },
   operation: { type: String, required: true },
   max: { type: Number, required: true },
   type: { type: String, required: true },
